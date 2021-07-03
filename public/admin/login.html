@@ -111,7 +111,8 @@
       if (myJson.user) {
         alert(`name: ${myJson.user.name}, role: ${myJson.user.role} `)
         window.location.href = "/admin/dashboard.html";
-
+        // Store
+          localStorage.setItem("user", JSON.stringify(myJson.user));
       } else {
         alert (`incorrect credentials`)
       }
