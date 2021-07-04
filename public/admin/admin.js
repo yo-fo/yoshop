@@ -18,3 +18,8 @@
     window.location.href = "/admin/login.html";
   }
 
+// GET PARAMETER
+function getURLParameter(param) {
+  var url = new URL(window.location.href);
+  return url.searchParams.get(param); 
+}

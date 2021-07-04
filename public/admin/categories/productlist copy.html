@@ -114,10 +114,11 @@
     <!-- Content Header (Page header) -->
     <div class="content-header">
       <div class="container-fluid">
-        <h1>Categories</h1><br>
-        <button type="button" data-toggle="modal" data-target="#modal-default" class="btn btn-block bg-gradient-primary">Add Category</button>
+        <h2 id=title></h2> <!-- insert title = productName -->
+        <button type="button" data-toggle="modal" data-target="#modal-default" class="btn btn-block bg-gradient-primary">Add Product</button>
         <hr>
-        <div id="categoriesRow" class="row">
+        <div id="productsRow" class="row">
+          
         </div>
       </div><!-- /.container-fluid -->
     </div>
@@ -143,55 +144,55 @@
 <!-- ./wrapper -->
 
 
-<!-- MODAL CREATE CATEGORY -->
+<!-- MODAL CREATE product -->
 <div class="modal fade" id="modal-default" style="display: none;" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h4 class="modal-title">Add Category</h4>
+        <h4 class="modal-title">Add Product</h4>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">×</span>
         </button>
       </div>
       <div class="modal-body" >
-        <input id="newCategoryName" type="text" placeholder="New Category Name">
+        <input id="newproductName" type="text" placeholder="New product Name">
       </div>
       <div class="modal-footer justify-content-between">
         <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-        <button type="button" class="btn btn-primary" data-dismiss="modal" id="addCategoryBTN">Add</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal" id="addproductBTN">Add</button>
       </div>
     </div>
     <!-- /.modal-content -->
   </div>
   <!-- /.modal-dialog -->
 </div>
-<!-- /MODAL CREATE CATEGORY -->
+<!-- /MODAL CREATE product -->
 
-<!-- MODAL EDIT CATEGORY -->
+<!-- MODAL EDIT product -->
 <div class="modal fade" id="modal-edit" style="display: none;" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h4 class="modal-title">Edit Category</h4>
+        <h4 class="modal-title">Edit Product</h4>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">×</span>
         </button>
       </div>
       <div class="modal-body" >        
-        <input id="categoryName" type="text" placeholder="New Category Name">
-        <input id="categoryId" type="hidden">
+        <input id="productName" type="text" placeholder="New product Name">
+        <input id="productId" type="hidden">
 
       </div>
       <div class="modal-footer justify-content-between">
         <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-        <button onclick="sendEdit()" type="button" class="btn btn-primary" data-dismiss="modal" id="addCategoryBTN">Edit</button>
+        <button onclick="sendEdit()" type="button" class="btn btn-primary" data-dismiss="modal" id="addproductBTN">Edit</button>
       </div>
     </div>
     <!-- /.modal-content -->
   </div>
   <!-- /.modal-dialog -->
 </div>
-<!-- /MODAL EDIT CATEGORY -->
+<!-- /MODAL EDIT product -->
 
 <!-- jQuery -->
 <script src="/AdminLTE-3.1.0/plugins/jquery/jquery.min.js"></script>
@@ -229,13 +230,13 @@
 <script src="/admin/admin.js"></script>
 
 
-<!-- CATEGORIES API -->
+<!-- productS API -->
 <script> 
-document.getElementById("addCategoryBTN").addEventListener("click", function() {
-  const newCategoryName = document.getElementById("newCategoryName").value
-  fetch('/admin/api/categories', { 
+document.getElementById("addproductBTN").addEventListener("click", function() {
+  const newproductName = document.getElementById("newproductName").value
+  fetch('/admin/api/products', { 
       body: JSON.stringify({
-        name: newCategoryName,
+        name: newproductName,
       }),
       method: 'POST',
       headers: {
@@ -250,41 +251,20 @@ document.getElementById("addCategoryBTN").addEventListener("click", function() {
     })
 })
 
-function createCategory (category, products, id){ 
-  return `
-          <div class="col-md-3 col-sm-6 col-12">
-            <div class="info-box">
-              <span class="info-box-icon bg-success"><i class="far fa-flag"></i></span>
-              <div class="info-box-content">
-                <a href="/admin/categories/productlist.html?categoryId=${id}&categoryName=${category}"><span id="category" class="info-box-text font-weight-bold">${category}</span></a>
-                <span id="number" class="info-box-number">${products}</span>
-                <div>
-                  <button onclick="edit(${id},'${category}')" type="button" class="btn btn-default" data-toggle="modal" data-target="#modal-edit">
-                    <i class="fas fa-edit"></i>
-                  </button>
-                  <button onclick="del(${id})" type="button" class="btn btn-default">
-                    <i class="fas fa-trash"></i>
-                  </button>
-                </div>
-              </div>
-              <!-- /.info-box-content -->
-            </div>
-            <!-- /.info-box -->
-          </div>`
-  };
 
-function edit(id, category) {       // edit Category
-  document.getElementById("categoryName").value = category;
-  document.getElementById("categoryId").value = id;
+
+function edit(id, product) {       // edit product
+  document.getElementById("productName").value = product;
+  document.getElementById("productId").value = id;
 }
 
 function sendEdit() { 
-  const categoryName = document.getElementById("categoryName").value;
-  const categoryId = document.getElementById("categoryId").value;
-  fetch('/admin/api/categories', {
+  const productName = document.getElementById("productName").value;
+  const productId = document.getElementById("productId").value;
+  fetch('/admin/api/products', {
     body: JSON.stringify({
-        id: categoryId,
-        name: categoryName,
+        id: productId,
+        name: productName,
       }),
       method: 'PUT',
       headers: {
@@ -296,12 +276,12 @@ function sendEdit() {
     })
     .then(function(myJson) { //lorsque j'obtiens l'objet alors...
       console.log(myJson);
-      init();   // Mise a jour des categories & affichage
+      init();   // Mise a jour des products & affichage
     })
 }
 
-function del(id) {      // Delete category
-  fetch('/admin/api/categories', { 
+function del(id) {      // Delete product
+  fetch('/admin/api/products', { 
       body: JSON.stringify({
         id: id
       }),
@@ -315,15 +295,16 @@ function del(id) {      // Delete category
     })
     .then(function(myJson) {
       console.log(myJson);
-      const name = category.name;
-      const id = category.id; 
+      const name = product.name;
+      const id = product.id; 
       init();
     })
 }
 
-init();         // display new categories
-  function init() {
-    fetch('/admin/api/categories', { 
+productsInit();         // display new products
+  function productsInit() {
+    const categoryId = getURLParameter("categoryId");
+    fetch(`/admin/api/products?categoryId=${categoryId}`, { 
       method: 'GET',
       headers: {
         'Content-Type': 'application/json'  // 'Content-Type': 'application/x-www-form-urlencoded',
@@ -334,18 +315,76 @@ init();         // display new categories
     })
     .then(function(myJson) {
       console.log(myJson);
-      document.getElementById("categoriesRow").innerHTML = ''; //security
-      myJson.categories.forEach(category => {
-        const name = category.name;
-        const products = category.products;
-        const id = category.id; 
-        document.getElementById("categoriesRow").innerHTML += createCategory(name, products, id);
-
+      document.getElementById("productsRow").innerHTML = ''; //security
+      myJson.products.forEach(product => {
+        const name = product.name;
+        const number = product.number;
+        const id = product.id; 
+        const productCategoryId = product.categoryId;
+        const desc = product.description; 
+        if(productCategoryId == categoryId) {
+          document.getElementById("productsRow").innerHTML += createProduct(product, id);
+        }
       });
     });
   }
+
+  function createProduct (product){ 
+  return `
+          <div class="col-md-4">
+            <!-- Widget: user widget style 1 -->
+            <div class="card card-widget widget-user">
+              <!-- Add the bg color to the header using any of the bg-* classes -->
+              <div class="widget-user-header bg-info">
+                <h3 class="widget-user-username">${product.name}</h3>
+                <h5 class="widget-user-desc">${product.description}</h5>
+              </div>
+              <div class="widget-user-image">
+                <img class="img-circle elevation-2" src="/admin/images/talmud.jpg" alt="User Avatar">
+              </div>
+              <div class="card-footer">
+                <div class="row">
+                  <div class="col-sm-3 border-right">
+                    <div class="description-block">
+                      <h5 class="description-header">price:<br>${product.price}₪</h5>
+                    </div>
+                    <!-- /.description-block -->
+                  </div>
+                  <!-- /.col -->
+                  <div class="col-sm-3 border-right">
+                    <div class="description-block">
+                      <h5 class="description-header">stock:<br>${product.stock}</h5>
+                    </div>
+                    <!-- /.description-block -->
+                  </div>
+                  <!-- /.col -->
+                  <div class="col-sm-3 border-right"">
+                    <div class="description-block">
+                      <h5 class="description-header ">
+                        <a href="#" ><i class="fas fa-plus-circle"></i></a><br>
+                        <a href="#" ><i class="fas fa-minus-circle"></i></a>
+                      </h5>
+                    </div>
+                    <!-- /.description-block -->
+                  </div>
+                  <!-- /.col -->
+                  <div class="col-sm-3">
+                    <div class="description-block">
+                      <h5 class="description-header">Cart:<br>0</h5>
+                    </div>
+                  <!-- /.description-block -->
+                  </div>
+                  <!-- /.col -->
+                </div>
+                <!-- /.row -->
+              </div> 
+            </div>
+            <!-- /.widget-user -->
+          </div>`
+  };
+
 </script>
-<!-- /CATEGORIES API -->
+<!-- /productS API -->
 
 </body>
 </html>
